@@ -16,17 +16,27 @@ let postSchema = new mongoose.Schema(
 				ref: "User",
 			},
 		],
+		dislikes: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "User",
+			},
+		],
 		comments: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
 				ref: "Comment",
 			},
 		],
-		likesCount: {
+		likeCount: {
 			type: Number,
 			default: 0,
 		},
-		commentsCount: {
+		dislikeCount: {
+			type: Number,
+			default: 0,
+		},
+		commentCount: {
 			type: Number,
 			default: 0,
 		},
