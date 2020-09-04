@@ -1,0 +1,19 @@
+{
+	"name": "asylum",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"dev": "nodemon app.js"
+	},
+	"author": "Samarpan Harit",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.0.0",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"mongodb": "^3.6.1",
+		"mongoose": "^5.10.3"
+	}
+}
