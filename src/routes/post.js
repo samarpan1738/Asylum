@@ -1,5 +1,4 @@
 const route = require("express").Router();
-const comment = require("./comment");
 
 route
 	.route("/")
