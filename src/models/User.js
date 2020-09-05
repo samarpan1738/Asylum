@@ -55,6 +55,10 @@ let userSchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
+		postCount: {
+			type: Number,
+			default: 0,
+		},
 	},
 	{ timestamps: { currentTime: () => Date.now() } }
 );

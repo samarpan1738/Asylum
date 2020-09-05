@@ -1,42 +1,21 @@
 const route = require("express").Router();
+const {
+	getPosts,
+	getPost,
+	addPost,
+	likePost,
+	dislikePost,
+	addComment,
+	likeComment,
+	dislikeComment,
+} = require("../controllers/post");
 
-route
-	.route("/")
-	// Get all posts
-	.get((req, res, next) => {})
-	// Add a post
-	.post((req, res, next) => {});
-
-route
-	.route("/:id")
-	// Get a post with id
-	.get((req, res, next) => {});
-
-route
-	.route("/:id/like")
-	// Like this post
-	.get((req, res, next) => {});
-
-route
-	.route("/:id/dislike")
-	// disLike this post
-	.get((req, res, next) => {});
-
-route
-	.route("/:id/comments")
-	// Get all comments on this post
-	.get((req, res, next) => {})
-	// Post a comment on this post
-	.post((req, res, next) => {});
-
-route
-	.route("/:id/comments/:commentId/like")
-	// Like this comment
-	.get((req, res, next) => {});
-
-route
-	.route("/:id/comments/:commentId/dislike")
-	// disLike this comment
-	.get((req, res, next) => {});
+route.route("/").get(getPosts).post(addPost);
+route.route("/:id").get(getPost);
+route.route("/:id/like").get(likePost);
+route.route("/:id/dislike").get(dislikePost);
+route.route("/:id/comment").post(addComment);
+route.route("/:id/comments/:commentId/like").get(likeComment);
+route.route("/:id/comments/:commentId/dislike").get(dislikeComment);
 
 module.exports = route;
