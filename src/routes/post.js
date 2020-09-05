@@ -9,13 +9,14 @@ const {
 	likeComment,
 	dislikeComment,
 } = require("../controllers/post");
+const watchman = require("../helpers/watchman");
 
-route.route("/").get(getPosts).post(addPost);
+route.route("/").get(getPosts).post(watchman, addPost);
 route.route("/:id").get(getPost);
-route.route("/:id/like").get(likePost);
-route.route("/:id/dislike").get(dislikePost);
-route.route("/:id/comment").post(addComment);
-route.route("/:id/comments/:commentId/like").get(likeComment);
-route.route("/:id/comments/:commentId/dislike").get(dislikeComment);
+route.route("/:id/like").get(watchman, likePost);
+route.route("/:id/dislike").get(watchman, dislikePost);
+route.route("/:id/comment").post(watchman, addComment);
+route.route("/:id/comments/:commentId/like").get(watchman, likeComment);
+route.route("/:id/comments/:commentId/dislike").get(watchman, dislikeComment);
 
 module.exports = route;

@@ -16,15 +16,17 @@ async function getPosts(req, res, next) {
 			.lean()
 			.exec();
 		//  * We need to check which posts are liked/disliked by current user
-		posts = posts.map((post) => {
-			post.isLiked = false;
-			post.isDisliked = false;
-			const likes = post.likes.map((like) => like._id);
-			post.isLiked = likes.includes(req.user._id);
-			const dislikes = post.dislikes.map((dislike) => dislike._id);
-			post.isDisliked = dislikes.includes(req.user._id);
-			return post;
-		});
+		if (req.user) {
+			posts = posts.map((post) => {
+				post.isLiked = false;
+				post.isDisliked = false;
+				const likes = post.likes.map((like) => like._id);
+				post.isLiked = likes.includes(req.user._id);
+				const dislikes = post.dislikes.map((dislike) => dislike._id);
+				post.isDisliked = dislikes.includes(req.user._id);
+				return post;
+			});
+		}
 		res.status(200).json({ success: true, data: posts });
 	} catch (err) {
 		next(err);
@@ -51,22 +53,24 @@ async function getPost(req, res, next) {
 			return next({ message: "Post not found" });
 		}
 		//  * We need to check some more things like whether this post is liked/disliked by current user
-		const likes = post.likes.map((like) => like._id);
-		post.isLiked = likes.includes(req.user._id);
-		const dislikes = post.dislikes.map((dislike) => dislike._id);
-		post.isDisliked = dislikes.includes(req.user._id);
-		//  * and is a comment on this post liked or disliked my current user
-		const comments = post.comments.map((comment) => {
-			comment.isLiked = false;
-			comment.isDisliked = false;
-			if (comment.likes.author._id == req.user._id) comment.isLiked = true;
-			if (comment.dislikes.author._id == req.user._id)
-				comment.isDisliked = true;
-			return comment;
-		});
-		post.comments = comments;
-		//  * and does this post belong to me
-		post.isMine = req.user._id == post.author._id;
+		if (req.user) {
+			const likes = post.likes.map((like) => like._id);
+			post.isLiked = likes.includes(req.user._id);
+			const dislikes = post.dislikes.map((dislike) => dislike._id);
+			post.isDisliked = dislikes.includes(req.user._id);
+			//  * and is a comment on this post liked or disliked my current user
+			const comments = post.comments.map((comment) => {
+				comment.isLiked = false;
+				comment.isDisliked = false;
+				if (comment.likes.author._id == req.user._id) comment.isLiked = true;
+				if (comment.dislikes.author._id == req.user._id)
+					comment.isDisliked = true;
+				return comment;
+			});
+			post.comments = comments;
+			//  * and does this post belong to me
+			post.isMine = req.user._id == post.author._id;
+		}
 
 		res.status(200).json({ success: true, data: post });
 	} catch (err) {

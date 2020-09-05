@@ -27,13 +27,13 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
 	console.log("Deserializing user ", id);
-	// User.findById(id)
-	// 	.then((user) => {
-	// 		done(null, user);
-	// 	})
-	// 	.catch((err) => {
-	// 		done(err, false);
-	// 	});
+	User.findById(id)
+		.then((user) => {
+			done(null, user);
+		})
+		.catch((err) => {
+			done(err, false);
+		});
 });
 
 module.exports = {

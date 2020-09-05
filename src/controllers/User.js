@@ -16,15 +16,15 @@ async function getUser(req, res, next) {
 			.select("-password")
 			.populate({
 				path: "posts",
-				select: "content likeCount dislikeCount commentCount",
+				select: "content likeCount dislikeCount commentCount _id",
 			})
 			.populate({
 				path: "followers",
-				select: "displayName username displayPic",
+				select: "displayName username displayPic _id",
 			})
 			.populate({
 				path: "following",
-				select: "displayName username displayPic",
+				select: "displayName username displayPic _id",
 			})
 			.lean()
 			.exec();
