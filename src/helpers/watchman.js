@@ -3,7 +3,7 @@ function watchman(req, res, next) {
 	if (req.user) {
 		next();
 	} else {
-		res.redirect("/auth/login");
+		res.redirect("/");
 	}
 }
 module.exports = { watchman };

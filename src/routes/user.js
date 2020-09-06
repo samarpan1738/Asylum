@@ -1,14 +1,16 @@
 const route = require("express").Router();
 const { getUsers, getUser, follow, unfollow } = require("../controllers/user");
-const watchman = require("../helpers/watchman");
+const { watchman } = require("../helpers/watchman");
 
-route.route("/").get(getUsers);
-route.route("/:id").get(getUser);
-route.route("/:id/follow").get(watchman, follow);
-route.route("/:id/unfollow").get(watchman, unfollow);
+route.route("/").get(watchman, getUsers);
+route.route("/:username").get(watchman, getUser);
+route.route("/:username/follow").get(watchman, follow);
+route.route("/:username/unfollow").get(watchman, unfollow);
 // Yet to be changed according to frontend
-route.get("/home", (req, res, next) => {});
-route.get("/explore", (req, res, next) => {});
-route.get("/profile", (req, res, next) => {});
+// route.get("/home", (req, res, next) => {
+// 	res.sendFile("homepage.html");
+// });
+// route.get("/explore", (req, res, next) => {});
+// route.get("/profile", (req, res, next) => {});
 
 module.exports = route;

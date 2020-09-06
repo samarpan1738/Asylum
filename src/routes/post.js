@@ -9,7 +9,7 @@ const {
 	likeComment,
 	dislikeComment,
 } = require("../controllers/post");
-const watchman = require("../helpers/watchman");
+const { watchman } = require("../helpers/watchman");
 
 route.route("/").get(getPosts).post(watchman, addPost);
 route.route("/:id").get(getPost);

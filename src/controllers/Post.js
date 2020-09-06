@@ -1,4 +1,6 @@
 const { Post } = require("../models/Post");
+const { User } = require("../models/User");
+const mongoose = require("mongoose");
 
 async function getPosts(req, res, next) {
 	try {
@@ -27,9 +29,11 @@ async function getPosts(req, res, next) {
 				return post;
 			});
 		}
+		// return { success: true, data: posts };
 		res.status(200).json({ success: true, data: posts });
 	} catch (err) {
 		next(err);
+		// return { success: false, err };
 	}
 }
 
@@ -87,6 +91,7 @@ async function addPost(req, res, next) {
 			content,
 		});
 		// Add it to user's post array
+		console.log("Current user id ", req.user._id);
 		await User.findByIdAndUpdate(req.user._id, {
 			$push: { posts: post._id },
 			$inc: { postCount: 1 },
