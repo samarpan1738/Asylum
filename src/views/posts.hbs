@@ -18,7 +18,7 @@
         {{> sidebar}}
         <div class="hero-section">
             <h3 class="heading">All Posts</h3>
-            <div class="posts">
+            {{!-- <div class="posts">
                 {{#each posts as |post|}}
                 <div class="post" id="{{post._id}}">
                     <div class="post__content-left">
@@ -63,7 +63,8 @@
                 </div>
                 {{/each}}
 
-            </div>
+            </div> --}}
+            {{> postsContainer}}
 </body>
 
 </html>

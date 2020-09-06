@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="/css/user.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="/js/user.js" defer></script>
+    <script src="/js/posts.js" defer></script>
     <script defer>
         const user = {{{ convert user }}}
+        const posts = {{{ convert posts }}}
     </script>
 </head>
 
@@ -36,7 +38,7 @@
                     <h3 class="profile__name">{{user.displayName}}</h3>
                 </div>
             </div>
-            <div class="posts">
+            {{!-- <div class="posts">
                 {{#each user.posts as |post|}}
                 <div class="post">
                     <div class="post__content-left">
@@ -80,7 +82,8 @@
                     </div>
                 </div>
                 {{/each}}
-            </div>
+            </div> --}}
+            {{> postsContainer}}
         </div>
 </body>
 

@@ -100,6 +100,17 @@ body {
 	padding-left: 1.5em;
 	border-bottom: 10px solid #e6ecf0;
 }
+.create-comment > form {
+	display: flex;
+	align-items: center;
+	/* align-items: center; */
+	/* flex-direction: column; */
+}
+.create-comment {
+	padding: 0.75em;
+	padding-left: 1.5em;
+	border-bottom: 5px solid #e6ecf0;
+}
 .create-post > form {
 	display: flex;
 	/* align-items: center; */
@@ -109,7 +120,14 @@ body {
 	font-size: 1.5rem;
 	/* margin-right: 1em; */
 	padding: 0.25em;
+
 	margin-bottom: 0.5em;
+}
+#create-comment__content {
+	font-size: 1.2rem;
+	padding: 0.25em;
+	margin-right: 0.75em;
+	/* width: 80%; */
 }
 #tweet-btn {
 	padding: 0.75em 1em;
@@ -122,10 +140,26 @@ body {
 	width: 80px;
 	transform: scale(0.9);
 	transition: transform 200ms ease-in-out;
+	cursor: pointer;
 }
-#tweet-btn:hover {
+#tweet-btn:hover,
+#comment-btn:hover {
 	transform: scale(1);
 }
+#comment-btn {
+	padding: 0.75em 1em;
+	font-weight: 700;
+	letter-spacing: 1px;
+	background-color: #1da1f2;
+	border: none;
+	color: white;
+	border-radius: 100px;
+	width: fit-content;
+	transform: scale(0.9);
+	transition: transform 200ms ease-in-out;
+	cursor: pointer;
+}
+
 .post {
 	padding: 0 1em;
 	/* padding-top: 1em; */

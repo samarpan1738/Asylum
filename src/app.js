@@ -10,7 +10,8 @@ const user = require("./routes/user");
 const post = require("./routes/post");
 const { errorHandler } = require("./helpers/error-handler");
 const { watchman } = require("./helpers/watchman");
-const { getPosts } = require("./controllers/post");
+const { getPostsOfFollowing } = require("./controllers/post");
+
 const hbs = require("hbs");
 //Body Parsers
 app.use(express.urlencoded({ extended: true }));
@@ -42,14 +43,19 @@ app.get("/", (req, res) => {
 	else res.render("index");
 });
 
-app.get("/home", watchman, async (req, res, next) => {
-	// TODO: render user and posts of the people he follows
-	res.render("homepage", { user: req.user });
-});
+app.get("/home", watchman, getPostsOfFollowing);
 
 app.use("/auth", auth);
 app.use("/user", user);
 app.use("/post", post);
+app.get("/logout", (req, res, next) => {
+	try {
+		req.logout();
+		res.status(200).redirect("/");
+	} catch (err) {
+		next(err);
+	}
+});
 app.use(errorHandler);
 
 connect()

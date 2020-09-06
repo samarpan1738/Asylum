@@ -19,13 +19,19 @@ async function getUsers(req, res, next) {
 async function getUser(req, res, next) {
 	try {
 		const { username } = req.params;
-		const user = await User.findOne({ username })
+		let user = await User.findOne({ username })
 			.select("-password")
 			.populate({
 				path: "posts",
 				select:
-					"content likeCount dislikeCount commentCount _id createdAt author",
-				populate: { path: "author", select: "username displayName displayPic" },
+					"content likeCount dislikeCount commentCount _id createdAt author likes",
+				populate: {
+					path: "author",
+				},
+				populate: {
+					path: "likes",
+					select: "username displayName displayPic _id",
+				},
 			})
 			.populate({
 				path: "followers",
@@ -68,8 +74,19 @@ async function getUser(req, res, next) {
 		//  * Check if this user is the current logged in user
 		// if (req.user._id === user._id) user.isMe = true;
 		user.isMe = req.user._id.toString() === user._id.toString();
-
-		res.status(200).render("user", { user: user });
+		// let posts = user.posts;
+		// console.log(user.posts[0].likes);
+		user.posts = user.posts.map((post) => {
+			post.isLiked = false;
+			post.isDisliked = false;
+			const likes = post.likes.map((like) => like._id.toString());
+			post.isLiked = likes.includes(req.user._id.toString());
+			return post;
+		});
+		user.posts.forEach((post) => {
+			post.author = req.user;
+		});
+		res.status(200).render("user", { user: user, posts: user.posts });
 		// res.status(200).json({ success: true, data: user });
 	} catch (err) {
 		next(err);

@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/css/homepage.css">
+    <script src="/js/posts.js" defer></script>
+    <script defer>
+        const user = {{{ convert user }}};
+        const posts = {{{ convert posts }}};
+    </script>
 </head>
 
 <body>
@@ -21,7 +26,7 @@
                     <button type="submit" id="tweet-btn">Tweet</button>
                 </form>
             </div>
-            <div class="posts">
+            {{!-- <div class="posts">
                 <div class="post">
                     <div class="post__content-left">
                         <img src="https://bit.ly/2Z9iVhk" alt="Display Pic">
@@ -151,10 +156,9 @@
                     </div>
                 </div>
 
-            </div>
-            <!-- <div class="posts">
+            </div> --}}
+            {{!-- <div class="posts">
                 {{#each posts as |post|}}
-                <li>{{item.id}} - {{item.name}}</li>
                 <div class="post__content-left">
                     <img src="{{post.author.displayPic}}" alt="Display Pic">
                 </div>
@@ -195,7 +199,8 @@
                     </div>
                 </div>
                 {{/each}}
-            </div> -->
+            </div> --}}
+            {{> postsContainer}}
         </div>
 </body>
 

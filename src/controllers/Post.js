@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 async function getPosts(req, res, next) {
 	try {
 		let posts = await Post.find({})
+			.sort({ createdAt: -1 })
 			.populate({
 				path: "author",
 				select: "username displayPic displayName _id",
@@ -38,17 +39,17 @@ async function getPosts(req, res, next) {
 			.lean()
 			.exec();
 		//  * We need to check which posts are liked/disliked by current user
-		if (req.user) {
-			posts = posts.map((post) => {
-				post.isLiked = false;
-				post.isDisliked = false;
-				const likes = post.likes.map((like) => like._id.toString());
-				post.isLiked = likes.includes(req.user._id.toString());
-				const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
-				post.isDisliked = dislikes.includes(req.user._id.toString());
-				return post;
-			});
-		}
+		// if (req.user) {
+		posts = posts.map((post) => {
+			post.isLiked = false;
+			post.isDisliked = false;
+			const likes = post.likes.map((like) => like._id.toString());
+			post.isLiked = likes.includes(req.user._id.toString());
+			const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+			post.isDisliked = dislikes.includes(req.user._id.toString());
+			return post;
+		});
+		// }
 		// return { success: true, data: posts };
 		res.status(200).render("posts", { posts: posts, user: req.user });
 		// res.status(200).json({ success: true, data: posts });
@@ -56,6 +57,36 @@ async function getPosts(req, res, next) {
 		next(err);
 		// return { success: false, err };
 	}
+}
+
+async function getPostsOfFollowing(req, res, next) {
+	let user = req.user;
+	let posts = await Post.find({})
+		.sort({ createdAt: -1 })
+		.populate({
+			path: "author",
+			select: "username displayPic displayName _id",
+		})
+		.populate({
+			path: "likes",
+			select: "username displayPic displayName _id",
+		})
+		.lean()
+		.exec();
+	posts = posts.filter((post) => {
+		return user.following.includes(post.author._id.toString());
+	});
+	posts = posts.map((post) => {
+		post.isLiked = false;
+		post.isDisliked = false;
+		const likes = post.likes.map((like) => like._id.toString());
+		post.isLiked = likes.includes(req.user._id.toString());
+		const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+		post.isDisliked = dislikes.includes(req.user._id.toString());
+		return post;
+	});
+	// console.log(posts);
+	res.status(200).render("homepage", { user, posts });
 }
 
 async function getPost(req, res, next) {
@@ -73,18 +104,15 @@ async function getPost(req, res, next) {
 				path: "dislikes",
 				select: "username displayPic displayName _id",
 			})
+			// TODO: Find Bugfix for--> 2 level deep population
 			.populate({
 				path: "comments",
 				populate: {
 					path: "author",
-					select: "username displayPic displayName _id",
+					select: "username displayPic displayName _id ",
 				},
 				populate: {
 					path: "likes",
-					select: "username displayPic displayName _id",
-				},
-				populate: {
-					path: "dislikes",
 					select: "username displayPic displayName _id",
 				},
 				populate: {
@@ -101,31 +129,30 @@ async function getPost(req, res, next) {
 		}
 		console.log(post);
 		//  * We need to check some more things like whether this post is liked/disliked by current user
-		if (req.user) {
-			const likes = post.likes.map((like) => like._id.toString());
-			post.isLiked = likes.includes(req.user._id.toString());
+		// if (req.user) {
+		const likes = post.likes.map((like) => like._id.toString());
+		post.isLiked = likes.includes(req.user._id.toString());
 
-			const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
-			post.isDisliked = dislikes.includes(req.user._id.toString());
-			console.log("*****************POST************");
-			console.log(post);
-			// console.log(post.comments);
-			//  * and is a comment on this post liked or disliked my current user
-			// const comments = post.comments.map((comment) => {
-			// 	comment.isLiked = false;
-			// 	comment.isDisliked = false;
-			// 	if (comment.likes.author._id.toString() == req.user._id.toString())
-			// 		comment.isLiked = true;
-			// 	if (comment.dislikes.author._id.toString() == req.user._id.toString())
-			// 		comment.isDisliked = true;
-			// 	return comment;
-			// });
-			// post.comments = comments;
-			//  * and does this post belong to me
-			post.isMine = req.user._id.toString() == post.author._id.toString();
-		}
+		const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+		post.isDisliked = dislikes.includes(req.user._id.toString());
+		console.log("*****************POST************");
+		console.log(post);
+		console.log(post.comments);
+		//  * and is a comment on this post liked or disliked my current user
+		// const comments = post.comments.map((comment) => {
+		// 	comment.isLiked = false;
+		// 	comment.isDisliked = false;
+		// 	if (comment.likes.author._id.toString() == req.user._id.toString())
+		// 		comment.isLiked = true;
+		// 	if (comment.dislikes.author._id.toString() == req.user._id.toString())
+		// 		comment.isDisliked = true;
+		// 	return comment;
+		// });
+		// post.comments = comments;
+		//  * and does this post belong to me
+		post.isMine = req.user._id.toString() == post.author._id.toString();
+		// }
 
-		// TODO: Render post with single post with it's COMMENTS
 		res.status(200).render("post", { user: req.user, post: post });
 		// res.status(200).json({ success: true, data: post });
 	} catch (err) {
@@ -263,7 +290,8 @@ async function likeComment(req, res, next) {
 			});
 		}
 
-		res.status(200).json({ success: true, data: false });
+		res.status(200).redirect("/post/" + req.params.id);
+		// res.status(200).json({ success: true, data: false });
 	} catch (err) {
 		next(err);
 	}
@@ -311,4 +339,5 @@ module.exports = {
 	addComment,
 	likeComment,
 	dislikeComment,
+	getPostsOfFollowing,
 };
