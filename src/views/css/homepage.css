@@ -21,7 +21,12 @@ body {
 	/* align-items: center; */
 }
 .sidebar {
+	/* position: fixed; */
 	width: 10%;
+	/* position: sticky; */
+	/* top: 0; */
+	height: 100%;
+	background-color: white;
 	min-width: 80px;
 	padding: 0.5em;
 	display: flex;
@@ -31,7 +36,16 @@ body {
 	border-right: 1px solid lightgray;
 	/* margin-right: 0.5em; */
 }
+.svg-icon:hover {
+	fill: #1da1f2;
+}
+.liked {
+	fill: red;
+}
 .hero-section {
+	/* margin-left: 10%; */
+	/* display: flex; */
+	/* flex-direction: column; */
 	width: 100%;
 	max-width: 750px;
 	border-right: 1px solid lightgray;
@@ -83,6 +97,7 @@ body {
 }
 .create-post {
 	padding: 0.75em;
+	padding-left: 1.5em;
 	border-bottom: 10px solid #e6ecf0;
 }
 .create-post > form {
@@ -105,6 +120,11 @@ body {
 	color: white;
 	border-radius: 100px;
 	width: 80px;
+	transform: scale(0.9);
+	transition: transform 200ms ease-in-out;
+}
+#tweet-btn:hover {
+	transform: scale(1);
 }
 .post {
 	padding: 0 1em;
@@ -112,6 +132,7 @@ body {
 	border-bottom: 1px solid lightgray;
 	/* border-top: none; */
 	display: flex;
+	cursor: pointer;
 }
 .post > * {
 	padding: 0.75em 0;
@@ -171,6 +192,7 @@ body {
 .profile {
 	display: flex;
 	border-bottom: 2px solid lightgray;
+	cursor: pointer;
 }
 .profile-left {
 	display: flex;
@@ -199,6 +221,7 @@ body {
 
 .profile__heading {
 	display: flex;
+	justify-content: space-between;
 }
 .profile__heading > h1 {
 	margin-right: 0.75em;
@@ -207,6 +230,9 @@ body {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 1.2em;
+}
+.counter {
+	font-weight: 700;
 }
 .profile__stats > * {
 	margin-right: 1em;

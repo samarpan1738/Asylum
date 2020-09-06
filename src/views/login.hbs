@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Login</title>
-	</head>
 
-	<body>
-		<h2>Log in to Asylum</h2>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Login</title>
+	<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+	<div class="container">
+		<h2 class="heading">Log in to Asylum</h2>
 		<form action="/auth/login" method="POST">
-			<input type="text" name="username" placeholder="Enter username" />
-			<input type="password" name="password" placeholder="Enter password" />
+			<div class="field-container">
+				<div class="label">
+					<span>Username</span>
+				</div>
+				<div>
+					<div>
+						<input type="text" name="username" id="username">
+					</div>
+				</div>
+			</div>
+			<div class="field-container">
+				<div class="label">
+					<span>Password</span>
+				</div>
+				<div>
+					<div>
+						<input type="password" name="password" id="password">
+					</div>
+				</div>
+			</div>
+			{{!-- <input type="text" name="username" placeholder="Enter username" /> --}}
+			{{!-- <input type="password" name="password" placeholder="Enter password" /> --}}
 			<button type="submit">Login</button>
 		</form>
-	</body>
+	</div>
+</body>
+
 </html>

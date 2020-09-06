@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "views")));
-app.use(express.static(path.join(__dirname, "frontend")));
+hbs.registerPartials(path.join(__dirname, "views", "partials"));
 
 app.use(
 	session({
@@ -43,9 +43,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", watchman, async (req, res, next) => {
-	// * render user and posts of the people he follows
-	// console.log(req.user._id);
-	console.log(req.user);
+	// TODO: render user and posts of the people he follows
 	res.render("homepage", { user: req.user });
 });
 

@@ -1,19 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Signup</title>
-	</head>
 
-	<body>
-		<h2>Create your account</h2>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Signup</title>
+	<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+	<div class="container">
+		<h2 class="heading">Join the Asylum</h2>
 		<form action="/auth/signup" method="POST">
-			<input type="text" name="displayName" placeholder="Enter display name" />
-			<input type="text" name="username" placeholder="Enter username" />
-			<input type="text" name="email" placeholder="Enter email" />
-			<input type="password" name="password" placeholder="Enter password" />
-			<button type="submit">Login</button>
+			<div class="field-container">
+				<div class="label">
+					<span>Display Name</span>
+				</div>
+				<div>
+					<div>
+						<input type="text" name="displayName" id="displayName">
+					</div>
+				</div>
+			</div>
+			<div class="field-container">
+				<div class="label">
+					<span>Username</span>
+				</div>
+				<div>
+					<div>
+						<input type="text" name="username" id="username">
+					</div>
+				</div>
+			</div>
+			<div class="field-container">
+				<div class="label">
+					<span>Email</span>
+				</div>
+				<div>
+					<div>
+						<input type="email" name="email" id="email">
+					</div>
+				</div>
+			</div>
+			<div class="field-container">
+				<div class="label">
+					<span>Password</span>
+				</div>
+				<div>
+					<div>
+						<input type="password" name="password" id="password">
+					</div>
+				</div>
+			</div>
+			<button type="submit">Signup</button>
 		</form>
-	</body>
+	</div>
+</body>
+
 </html>

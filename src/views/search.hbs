@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/css/user.css">
+    <script src="/js/search.js" defer></script>
+    <script defer>
+        const users = {{{ convert users }}}
+        const user = {{{ convert user }}}
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        {{> sidebar}}
+        <div class="hero-section">
+            <h3 class="heading">Search</h3>
+            {{#each users as |user|}}
+            <div class="profile" id="{{user._id}}" onclick="window.location.href='/user/{{user.username}}'">
+                <div class="profile-left">
+                    <img src="{{user.displayPic}}" alt="Display Pic">
+                </div>
+                <div class="profile-right">
+                    <div class="profile__heading">
+                        <h1>{{user.username}}</h1>
+                        <button id="follow-btn" class="not-following"
+                            onclick="window.location.href='/user/{{user.username}}/toggleFollow'">Follow</button>
+                    </div>
+                    <div class="profile__stats">
+                        <div><span>{{user.postCount}} </span><span>posts</span></div>
+                        <div><span>{{user.followerCount}} </span><span>followers</span></div>
+                        <div><span>{{user.followingCount}} </span><span>following</span></div>
+                    </div>
+                    <h3 class="profile__name">{{user.displayName}}</h3>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+</body>
+
+</html>

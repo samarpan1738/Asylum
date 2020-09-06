@@ -16,7 +16,7 @@ route.route("/:id").get(getPost);
 route.route("/:id/like").get(watchman, likePost);
 route.route("/:id/dislike").get(watchman, dislikePost);
 route.route("/:id/comment").post(watchman, addComment);
-route.route("/:id/comments/:commentId/like").get(watchman, likeComment);
-route.route("/:id/comments/:commentId/dislike").get(watchman, dislikeComment);
+route.route("/:id/comment/:commentId/like").get(watchman, likeComment);
+route.route("/:id/comment/:commentId/dislike").get(watchman, dislikeComment);
 
 module.exports = route;

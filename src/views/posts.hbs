@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{user.displayName}}(@{{user.username}})</title>
+    <title>Explore</title>
     <link rel="stylesheet" href="/css/homepage.css">
-    <link rel="stylesheet" href="/css/user.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="/js/user.js" defer></script>
+    <script src="/js/posts.js" defer></script>
     <script defer>
-        const user = {{{ convert user }}}
+        const user = {{{ convert user }}};
+        const posts = {{{ convert posts }}};
     </script>
 </head>
 
@@ -18,27 +17,10 @@
     <div id="app">
         {{> sidebar}}
         <div class="hero-section">
-            <h3 class="heading">{{user.displayName}}</h3>
-            <div class="profile">
-                <div class="profile-left">
-                    <img src="{{user.displayPic}}" alt="Display Pic">
-                </div>
-                <div class="profile-right">
-                    <div class="profile__heading">
-                        <h1>{{user.username}}</h1>
-                        <button id="follow-btn" class="not-following">Follow</button>
-                    </div>
-                    <div class="profile__stats">
-                        <div><span class="counter">{{user.postCount}} </span><span>posts</span></div>
-                        <div><span class="counter">{{user.followerCount}} </span><span>followers</span></div>
-                        <div><span class="counter">{{user.followingCount}} </span><span>following</span></div>
-                    </div>
-                    <h3 class="profile__name">{{user.displayName}}</h3>
-                </div>
-            </div>
+            <h3 class="heading">All Posts</h3>
             <div class="posts">
-                {{#each user.posts as |post|}}
-                <div class="post">
+                {{#each posts as |post|}}
+                <div class="post" id="{{post._id}}">
                     <div class="post__content-left">
                         <img src="{{post.author.displayPic}}" alt="Display Pic">
                     </div>
@@ -53,7 +35,7 @@
                         </div>
                         <div class="post__social-activity">
                             <div class="post__likes">
-                                <span>
+                                <a href="/post/{{post._id}}/like">
                                     <svg viewBox="0 0 24 24" width="24" height="24">
                                         <g>
                                             <path
@@ -61,11 +43,11 @@
                                             </path>
                                         </g>
                                     </svg>
-                                </span>
+                                </a>
                                 <span class="post__like-count">{{post.likeCount}}</span>
                             </div>
                             <div class="post__comments">
-                                <span>
+                                <a href="/post/{{post._id}}">
                                     <svg viewBox="0 0 24 24" width="24" height="24">
                                         <g>
                                             <path
@@ -73,15 +55,15 @@
                                             </path>
                                         </g>
                                     </svg>
-                                </span>
+                                </a>
                                 <span class="post__comment-count">{{post.commentCount}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 {{/each}}
+
             </div>
-        </div>
 </body>
 
 </html>

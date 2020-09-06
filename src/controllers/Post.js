@@ -1,19 +1,39 @@
 const { Post } = require("../models/Post");
 const { User } = require("../models/User");
+const { Comment } = require("../models/Comment");
+
 const mongoose = require("mongoose");
 
 async function getPosts(req, res, next) {
 	try {
-		const posts = await Post.find({})
-			.populate({ path: "author", select: "username displayPic _id" })
-			.populate({ path: "likes", select: "username displayPic _id" })
-			.populate({ path: "dislikes", select: "username displayPic _id" })
+		let posts = await Post.find({})
+			.populate({
+				path: "author",
+				select: "username displayPic displayName _id",
+			})
+			.populate({
+				path: "likes",
+				select: "username displayPic displayName _id",
+			})
+			.populate({
+				path: "dislikes",
+				select: "username displayPic displayName _id",
+			})
 			.populate({
 				path: "comments",
 				select: "-post",
-				populate: { path: "author", select: "username displayPic _id" },
-				populate: { path: "likes", select: "username displayPic _id" },
-				populate: { path: "dislikes", select: "username displayPic _id" },
+				populate: {
+					path: "author",
+					select: "username displayPic displayName _id",
+				},
+				populate: {
+					path: "likes",
+					select: "username displayPic displayName _id",
+				},
+				populate: {
+					path: "dislikes",
+					select: "username displayPic displayName _id",
+				},
 			})
 			.lean()
 			.exec();
@@ -22,15 +42,16 @@ async function getPosts(req, res, next) {
 			posts = posts.map((post) => {
 				post.isLiked = false;
 				post.isDisliked = false;
-				const likes = post.likes.map((like) => like._id);
-				post.isLiked = likes.includes(req.user._id);
-				const dislikes = post.dislikes.map((dislike) => dislike._id);
-				post.isDisliked = dislikes.includes(req.user._id);
+				const likes = post.likes.map((like) => like._id.toString());
+				post.isLiked = likes.includes(req.user._id.toString());
+				const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+				post.isDisliked = dislikes.includes(req.user._id.toString());
 				return post;
 			});
 		}
 		// return { success: true, data: posts };
-		res.status(200).json({ success: true, data: posts });
+		res.status(200).render("posts", { posts: posts, user: req.user });
+		// res.status(200).json({ success: true, data: posts });
 	} catch (err) {
 		next(err);
 		// return { success: false, err };
@@ -39,44 +60,74 @@ async function getPosts(req, res, next) {
 
 async function getPost(req, res, next) {
 	try {
-		const post = Post.findById(req.params.id)
-			.populate({ path: "author", select: "username displayPic _id" })
-			.populate({ path: "likes", select: "username displayPic _id" })
-			.populate({ path: "dislikes", select: "username displayPic _id" })
+		let post = await Post.findById(req.params.id)
+			.populate({
+				path: "author",
+				select: "username displayPic displayName _id",
+			})
+			.populate({
+				path: "likes",
+				select: "username displayPic displayName _id",
+			})
+			.populate({
+				path: "dislikes",
+				select: "username displayPic displayName _id",
+			})
 			.populate({
 				path: "comments",
-				select: "-post",
-				populate: { path: "author", select: "username displayPic _id" },
-				populate: { path: "likes", select: "username displayPic _id" },
-				populate: { path: "dislikes", select: "username displayPic _id" },
+				populate: {
+					path: "author",
+					select: "username displayPic displayName _id",
+				},
+				populate: {
+					path: "likes",
+					select: "username displayPic displayName _id",
+				},
+				populate: {
+					path: "dislikes",
+					select: "username displayPic displayName _id",
+				},
+				populate: {
+					path: "post",
+					select: "_id",
+				},
 			})
 			.lean()
 			.exec();
+
 		if (!post) {
 			res.status(404);
 			return next({ message: "Post not found" });
 		}
+		console.log(post);
 		//  * We need to check some more things like whether this post is liked/disliked by current user
 		if (req.user) {
-			const likes = post.likes.map((like) => like._id);
-			post.isLiked = likes.includes(req.user._id);
-			const dislikes = post.dislikes.map((dislike) => dislike._id);
-			post.isDisliked = dislikes.includes(req.user._id);
+			const likes = post.likes.map((like) => like._id.toString());
+			post.isLiked = likes.includes(req.user._id.toString());
+
+			const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+			post.isDisliked = dislikes.includes(req.user._id.toString());
+			console.log("*****************POST************");
+			console.log(post);
+			// console.log(post.comments);
 			//  * and is a comment on this post liked or disliked my current user
-			const comments = post.comments.map((comment) => {
-				comment.isLiked = false;
-				comment.isDisliked = false;
-				if (comment.likes.author._id == req.user._id) comment.isLiked = true;
-				if (comment.dislikes.author._id == req.user._id)
-					comment.isDisliked = true;
-				return comment;
-			});
-			post.comments = comments;
+			// const comments = post.comments.map((comment) => {
+			// 	comment.isLiked = false;
+			// 	comment.isDisliked = false;
+			// 	if (comment.likes.author._id.toString() == req.user._id.toString())
+			// 		comment.isLiked = true;
+			// 	if (comment.dislikes.author._id.toString() == req.user._id.toString())
+			// 		comment.isDisliked = true;
+			// 	return comment;
+			// });
+			// post.comments = comments;
 			//  * and does this post belong to me
-			post.isMine = req.user._id == post.author._id;
+			post.isMine = req.user._id.toString() == post.author._id.toString();
 		}
 
-		res.status(200).json({ success: true, data: post });
+		// TODO: Render post with single post with it's COMMENTS
+		res.status(200).render("post", { user: req.user, post: post });
+		// res.status(200).json({ success: true, data: post });
 	} catch (err) {
 		next(err);
 	}
@@ -96,7 +147,9 @@ async function addPost(req, res, next) {
 			$push: { posts: post._id },
 			$inc: { postCount: 1 },
 		});
-		res.status(200).json({ success: true, data: post });
+
+		res.status(200).redirect("/home");
+		// res.status(200).json({ success: true, data: post });
 	} catch (err) {
 		next(err);
 	}
@@ -104,7 +157,7 @@ async function addPost(req, res, next) {
 
 async function likePost(req, res, next) {
 	try {
-		const post = Post.findById(req.params.id);
+		const post = await Post.findById(req.params.id);
 		if (!post) {
 			res.status(404);
 			return next({ message: "Post not found" });
@@ -122,7 +175,8 @@ async function likePost(req, res, next) {
 			});
 		}
 
-		res.status(200).json({ success: true, data: false });
+		res.status(200).redirect("/post");
+		// res.status(200).json({ success: true, data: false });
 	} catch (err) {
 		next(err);
 	}
@@ -130,7 +184,7 @@ async function likePost(req, res, next) {
 
 async function dislikePost(req, res, next) {
 	try {
-		const post = Post.findById(req.params.id);
+		const post = await Post.findById(req.params.id);
 		if (!post) {
 			res.status(404);
 			return next({ message: "Post not found" });
@@ -156,26 +210,27 @@ async function dislikePost(req, res, next) {
 
 async function addComment(req, res, next) {
 	try {
-		const post = Post.findById(req.params.id);
+		const post = await Post.findById(req.params.id);
 		if (!post) {
 			res.status(404);
 			return next({ message: "Post not found" });
 		}
 		const { content } = req.body;
 		// * Create a comment
-		const comment = Comment.create({
-			author: req.user._id,
-			post: req.params.id,
+		const comment = await Comment.create({
+			author: mongoose.Types.ObjectId(req.user._id),
+			post: mongoose.Types.ObjectId(req.params.id),
 			content,
 		});
-
+		console.log(comment);
 		// * Add comment to post
 		await Post.findByIdAndUpdate(req.params.id, {
-			$push: { comments: comment._id },
+			$push: { comments: mongoose.Types.ObjectId(comment._id) },
 			$inc: { commentCount: 1 },
 		});
 
-		res.status(200).json({ success: true, data: comment });
+		res.status(200).redirect("/post/" + req.params.id);
+		// res.status(200).json({ success: true, data: comment });
 	} catch (err) {
 		next(err);
 	}
@@ -184,13 +239,13 @@ async function addComment(req, res, next) {
 async function likeComment(req, res, next) {
 	try {
 		// * Check is post exists
-		const post = Post.findById(req.params.id);
+		const post = await Post.findById(req.params.id);
 		if (!post) {
 			res.status(404);
 			return next({ message: "Post not found" });
 		}
 		// * Check is comment exists
-		const comment = Comment.findById(req.params.commentId);
+		const comment = await Comment.findById(req.params.commentId);
 		if (!comment) {
 			res.status(404);
 			return next({ message: "Comment not found" });
