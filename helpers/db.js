@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 // const DB_URI = "mongodb://localhost:27017/whatsapp";
-const DB_URI =
-	"mongodb+srv://root:root@whatsapp.w5wp9.mongodb.net/whatsapp?retryWrites=true&w=majority";
+const DB_URI = process.env.DB_URI;
 
 function connect() {
 	return mongoose.connect(DB_URI, {
