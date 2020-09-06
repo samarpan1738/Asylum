@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT | 2000;
+const PORT = process.env.PORT || 2000;
 const path = require("path");
 const session = require("express-session");
 const { passport } = require("./helpers/passport-config");
