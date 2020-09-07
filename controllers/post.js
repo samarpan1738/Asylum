@@ -51,7 +51,7 @@ async function getPosts(req, res, next) {
 		});
 		// }
 		// return { success: true, data: posts };
-		res.status(200).render("posts", {
+		res.status(200).render("explore", {
 			loggedInUser: req.user,
 			posts: posts,
 			user: req.user,

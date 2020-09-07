@@ -41,7 +41,7 @@ hbs.registerHelper("convert", function (data) {
 
 app.get("/", (req, res) => {
 	if (req.user) res.redirect("/home");
-	else res.render("index");
+	else res.render("auth");
 });
 
 app.get("/home", watchman, getPostsOfFollowing);
