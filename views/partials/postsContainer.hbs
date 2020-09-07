@@ -1,6 +1,6 @@
 <div class="posts">
     {{#each posts as |post|}}
-    <div class="post" id="{{post._id}}">
+    <div class="post" id="{{post._id}}" onclick="window.location.href='/post/{{post._id}}'">
         <div class="post__content-left">
             <img src="{{post.author.displayPic}}" alt="Display Pic">
         </div>

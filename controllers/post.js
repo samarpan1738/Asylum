@@ -127,7 +127,6 @@ async function getPost(req, res, next) {
 			res.status(404);
 			return next({ message: "Post not found" });
 		}
-		console.log(post);
 		//  * We need to check some more things like whether this post is liked/disliked by current user
 		// if (req.user) {
 		const likes = post.likes.map((like) => like._id.toString());
@@ -135,9 +134,9 @@ async function getPost(req, res, next) {
 
 		const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
 		post.isDisliked = dislikes.includes(req.user._id.toString());
-		console.log("*****************POST************");
-		console.log(post);
-		console.log(post.comments);
+		// console.log("*****************POST************");
+		// console.log(post);
+		// console.log(post.comments);
 		//  * and is a comment on this post liked or disliked my current user
 		// const comments = post.comments.map((comment) => {
 		// 	comment.isLiked = false;
@@ -169,7 +168,7 @@ async function addPost(req, res, next) {
 			content,
 		});
 		// Add it to user's post array
-		console.log("Current user id ", req.user._id);
+		// console.log("Current user id ", req.user._id);
 		await User.findByIdAndUpdate(req.user._id, {
 			$push: { posts: post._id },
 			$inc: { postCount: 1 },
@@ -249,7 +248,7 @@ async function addComment(req, res, next) {
 			post: mongoose.Types.ObjectId(req.params.id),
 			content,
 		});
-		console.log(comment);
+		// console.log(comment);
 		// * Add comment to post
 		await Post.findByIdAndUpdate(req.params.id, {
 			$push: { comments: mongoose.Types.ObjectId(comment._id) },

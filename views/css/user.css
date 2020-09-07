@@ -5,6 +5,7 @@
 	letter-spacing: 1px;
 	border-radius: 100px;
 	width: 90px;
+	transition: all 200ms ease-in-out;
 }
 .not-following {
 	border-color: #1da1f2;

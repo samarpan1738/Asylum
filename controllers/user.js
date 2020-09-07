@@ -23,11 +23,7 @@ async function getUser(req, res, next) {
 			.select("-password")
 			.populate({
 				path: "posts",
-				select:
-					"content likeCount dislikeCount commentCount _id createdAt author likes",
-				populate: {
-					path: "author",
-				},
+				// select: "content likeCount dislikeCount commentCount _id createdAt",
 				populate: {
 					path: "likes",
 					select: "username displayName displayPic _id",
@@ -43,11 +39,11 @@ async function getUser(req, res, next) {
 			})
 			.lean()
 			.exec();
+		// console.log(user.populated("posts"));
 		if (!user) {
 			res.status(404);
 			return next({ success: false, message: "User does not exist" });
 		}
-		// console.log(user);
 
 		user.isFollowing = false;
 		// * Check who all in the user's follower list is the current user following
