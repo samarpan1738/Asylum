@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Single Post</title>
     <link rel="stylesheet" href="/css/homepage.css">
+    <script src="/js/posts.js" defer></script>
+    <script src="/js/index.js" defer></script>
     {{!-- <script src="/js/post.js" defer></script> --}}
     <script defer>
-        const post = {{{ convert post }}}
+        const loggedInUser = {{{ convert loggedInUser }}}
+        const posts = {{{ convert posts }}}
         const user = {{{ convert user }}}
     </script>
 </head>
@@ -17,8 +20,10 @@
     <div id="app">
         {{> sidebar}}
         <div class="hero-section">
+            {{#each posts as |post|}}
             <h3 class="heading">{{post.author.displayName}}'s Post</h3>
-            <div class="post">
+            {{/each}}
+            {{!-- <div class="post">
                 <div class="post__content-left">
                     <img src="{{post.author.displayPic}}" alt="Display Pic">
                 </div>
@@ -58,7 +63,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+            {{> postsContainer}}
             <h3 class="heading">Comments</h3>
             <div class="create-comment">
                 <form action="/post/{{post._id}}/comment" method="POST">
@@ -69,6 +75,7 @@
                 </form>
             </div>
             <div class="comments-container">
+                {{#each posts as |post|}}
                 {{#each post.comments as |comment|}}
                 {{!-- <div class="comment"> --}}
                 <div class="post">
@@ -101,6 +108,7 @@
                     </div>
                 </div>
                 {{!-- </div> --}}
+                {{/each}}
                 {{/each}}
             </div>
 </body>

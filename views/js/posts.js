@@ -1,26 +1,47 @@
 // let likeIcon=document.('post__likes')
 posts.forEach((post) => {
-	let svg = document.getElementById(post._id).children[1].children[2]
-		.children[0].children[0].children[0];
+	let svg = document.querySelector(`#p_${post._id} .likeBtn`);
 	if (post.isLiked) svg.classList.toggle("liked");
 });
 
-let postsElements = Array.from(document.getElementsByClassName("post"));
+let postsElements = Array.from(document.querySelectorAll(".posts .post"));
 postsElements.forEach((postElement) => {
 	postElement.onclick = (e) => {
-		console.log(e.target);
+		// console.log(e.target);
+		let post_id = postElement.id.split("_")[1];
 		if (e.target.classList[0] == "likeBtn") {
-			fetch(`/post/${postElement.id}/like`, {
+			// * Change likBtn style
+			document
+				.querySelector(`#p_${post_id} .likeBtn`)
+				.classList.toggle("liked");
+			fetch(`/post/${post_id}/like`, {
 				method: "GET",
 			})
-				.then(() => {
-					window.location.href = window.location.href;
+				.then((res) => {
+					// console.log(res);
+					return res.json();
+				})
+				.then((data) => {
+					// console.log(data);
+					if (data.data === "liked") likePost(post_id);
+					else if (data.data === "unliked") unlikePost(post_id);
 				})
 				.catch((err) => {
-					console.log("Error liking  the post");
+					// console.log("Error liking  the post");
 				});
 		} else {
-			window.location.href = `/post/${postElement.id}`;
+			window.location.href = `/post/${post_id}`;
 		}
 	};
 });
+
+function likePost(post_id) {
+	// document.querySelector(`#p_${post_id} .likeBtn`).classList.toggle("liked");
+	let likesCounter = document.querySelector(`#p_${post_id} .post__like-count`);
+	likesCounter.innerText = parseInt(likesCounter.innerText) + 1;
+}
+function unlikePost(post_id) {
+	// document.querySelector(`#p_${post_id} .likeBtn`).classList.toggle("liked");
+	let likesCounter = document.querySelector(`#p_${post_id} .post__like-count`);
+	likesCounter.innerText = parseInt(likesCounter.innerText) - 1;
+}

@@ -135,7 +135,7 @@ async function getPost(req, res, next) {
 		// if (req.user) {
 		const likes = post.likes.map((like) => like._id.toString());
 		post.isLiked = likes.includes(req.user._id.toString());
-		console.log(likes);
+		// console.log(likes);
 		// const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
 		// post.isDisliked = dislikes.includes(req.user._id.toString());
 
@@ -156,10 +156,35 @@ async function getPost(req, res, next) {
 		//  * and does this post belong to me
 		post.isMine = req.user._id.toString() == post.author._id.toString();
 		// }
+		for (let i = 0; i < post.comments.length; ++i) {
+			let comment = await Comment.findById(post.comments[i]._id)
+				.populate({
+					path: "author",
+					select: "displayName username displayPic _id",
+				})
+				.populate({
+					path: "likes",
+					select: "displayName username displayPic _id",
+				});
+			// console.log(comment);
 
-		res
-			.status(200)
-			.render("post", { loggedInUser: req.user, user: req.user, post: post });
+			comment.isLiked = false;
+			comment.likes.forEach((like) => {
+				// console.log(like);
+				if (like._id.toString() == req.user._id.toString())
+					comment.isLiked = true;
+			});
+			// post.comments[i].author = author;
+			post.comments[i] = comment;
+			// console.log(comment);
+		}
+		console.log(post.comments[0].isLiked);
+		// post.comments = comments;
+		res.status(200).render("post", {
+			loggedInUser: req.user,
+			user: req.user,
+			posts: [post],
+		});
 		// res.status(200).json({ success: true, data: post });
 	} catch (err) {
 		next(err);
@@ -196,22 +221,23 @@ async function likePost(req, res, next) {
 			return next({ message: "Post not found" });
 		}
 		// * Check if it's already liked then unlike the post
-		console.log("Like post");
+		// console.log("Like post");
 		console.log(post.likes);
 		if (post.likes.includes(req.user._id)) {
 			await Post.findByIdAndUpdate(post._id, {
 				$pull: { likes: req.user._id },
 				$inc: { likeCount: -1 },
 			});
+			res.status(200).json({ success: true, data: "unliked" });
 		} else {
 			await Post.findByIdAndUpdate(post._id, {
 				$push: { likes: req.user._id },
 				$inc: { likeCount: 1 },
 			});
+			res.status(200).json({ success: true, data: "liked" });
 		}
 
-		res.status(200).redirect("/post");
-		// res.status(200).json({ success: true, data: false });
+		// res.status(200).redirect("/post");
 	} catch (err) {
 		next(err);
 	}

@@ -11,7 +11,6 @@ async function getUsers(req, res, next) {
 
 		res.status(200).render("search", {
 			loggedInUser: req.user,
-			user: req.user,
 			users: users,
 		});
 		// res.status(200).json({ success: true, data: users });
@@ -93,7 +92,7 @@ async function getUser(req, res, next) {
 		});
 		res.status(200).render("profile", {
 			loggedInUser: req.user,
-			user: user,
+			users: [user],
 			posts: user.posts,
 		});
 		// res.status(200).json({ success: true, data: user });
