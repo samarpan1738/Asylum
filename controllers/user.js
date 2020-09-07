@@ -9,7 +9,11 @@ async function getUsers(req, res, next) {
 			user.isFollowing = req.user.following.includes(user._id.toString());
 		});
 
-		res.status(200).render("search", { user: req.user, users: users });
+		res.status(200).render("search", {
+			loggedInUser: req.user,
+			user: req.user,
+			users: users,
+		});
 		// res.status(200).json({ success: true, data: users });
 	} catch (err) {
 		next(err);
@@ -80,9 +84,20 @@ async function getUser(req, res, next) {
 			return post;
 		});
 		user.posts.forEach((post) => {
-			post.author = req.user;
+			post.author = {
+				username: user.username,
+				_id: user._id,
+				displayName: user.displayName,
+				displayPic: user.displayPic,
+			};
 		});
-		res.status(200).render("user", { user: user, posts: user.posts });
+		res
+			.status(200)
+			.render("user", {
+				loggedInUser: req.user,
+				user: user,
+				posts: user.posts,
+			});
 		// res.status(200).json({ success: true, data: user });
 	} catch (err) {
 		next(err);
@@ -125,6 +140,9 @@ async function getUser(req, res, next) {
 // }
 
 async function toggleFollow(req, res, next) {
+	console.log(
+		"Follow request from " + req.user.username + " to " + req.params.username
+	);
 	// if of the user to follow
 	let { username } = req.params;
 	let my_username = req.user.username;

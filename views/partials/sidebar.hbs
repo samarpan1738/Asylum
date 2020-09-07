@@ -16,7 +16,7 @@
             <a href="/home" class="icon-label">Home</a>
         </div>
         <div class="nav-option" id="nav__profile">
-            <a href="/user/{{user.username}}">
+            <a href="/user/{{loggedInUser.username}}">
                 <svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon">
                     <g>
                         <path
@@ -25,7 +25,7 @@
                     </g>
                 </svg>
             </a>
-            <a class="icon-label" href="/user/{{user.username}}">Profile</a>
+            <a class="icon-label" href="/user/{{loggedInUser.username}}">Profile</a>
         </div>
         <div class="nav-option" id="nav__explore">
             <a href="/post">

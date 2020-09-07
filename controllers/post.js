@@ -51,7 +51,11 @@ async function getPosts(req, res, next) {
 		});
 		// }
 		// return { success: true, data: posts };
-		res.status(200).render("posts", { posts: posts, user: req.user });
+		res.status(200).render("posts", {
+			loggedInUser: req.user,
+			posts: posts,
+			user: req.user,
+		});
 		// res.status(200).json({ success: true, data: posts });
 	} catch (err) {
 		next(err);
@@ -86,7 +90,7 @@ async function getPostsOfFollowing(req, res, next) {
 		return post;
 	});
 	// console.log(posts);
-	res.status(200).render("homepage", { user, posts });
+	res.status(200).render("homepage", { loggedInUser: req.user, user, posts });
 }
 
 async function getPost(req, res, next) {
@@ -131,9 +135,10 @@ async function getPost(req, res, next) {
 		// if (req.user) {
 		const likes = post.likes.map((like) => like._id.toString());
 		post.isLiked = likes.includes(req.user._id.toString());
+		console.log(likes);
+		// const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
+		// post.isDisliked = dislikes.includes(req.user._id.toString());
 
-		const dislikes = post.dislikes.map((dislike) => dislike._id.toString());
-		post.isDisliked = dislikes.includes(req.user._id.toString());
 		// console.log("*****************POST************");
 		// console.log(post);
 		// console.log(post.comments);
@@ -152,7 +157,9 @@ async function getPost(req, res, next) {
 		post.isMine = req.user._id.toString() == post.author._id.toString();
 		// }
 
-		res.status(200).render("post", { user: req.user, post: post });
+		res
+			.status(200)
+			.render("post", { loggedInUser: req.user, user: req.user, post: post });
 		// res.status(200).json({ success: true, data: post });
 	} catch (err) {
 		next(err);
@@ -189,6 +196,8 @@ async function likePost(req, res, next) {
 			return next({ message: "Post not found" });
 		}
 		// * Check if it's already liked then unlike the post
+		console.log("Like post");
+		console.log(post.likes);
 		if (post.likes.includes(req.user._id)) {
 			await Post.findByIdAndUpdate(post._id, {
 				$pull: { likes: req.user._id },

@@ -7,6 +7,7 @@
     <title>Search</title>
     <link rel="stylesheet" href="/css/homepage.css">
     <link rel="stylesheet" href="/css/user.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="/js/index.js" defer></script>
     <script src="/js/search.js" defer></script>
     <script defer>
@@ -21,15 +22,14 @@
         <div class="hero-section">
             <h3 class="heading">Search</h3>
             {{#each users as |user|}}
-            <div class="profile" id="{{user._id}}" onclick="window.location.href='/user/{{user.username}}'">
+            <div class="profile" id="{{user.username}}">
                 <div class="profile-left">
                     <img src="{{user.displayPic}}" alt="Display Pic">
                 </div>
                 <div class="profile-right">
                     <div class="profile__heading">
                         <h1>{{user.username}}</h1>
-                        <button id="follow-btn" class="not-following"
-                            onclick="window.location.href='/user/{{user.username}}/toggleFollow'">Follow</button>
+                        <button class="follow-btn" class="not-following">Follow</button>
                     </div>
                     <div class="profile__stats">
                         <div><span>{{user.postCount}} </span><span>posts</span></div>
