@@ -104,26 +104,22 @@ async function getPost(req, res, next) {
 				path: "likes",
 				select: "username displayPic displayName _id",
 			})
-			.populate({
-				path: "dislikes",
-				select: "username displayPic displayName _id",
-			})
 			// TODO: Find Bugfix for--> 2 level deep population
-			.populate({
-				path: "comments",
-				populate: {
-					path: "author",
-					select: "username displayPic displayName _id ",
-				},
-				populate: {
-					path: "likes",
-					select: "username displayPic displayName _id",
-				},
-				populate: {
-					path: "post",
-					select: "_id",
-				},
-			})
+			// .populate({
+			// 	path: "comments",
+			// 	populate: {
+			// 		path: "author",
+			// 		select: "username displayPic displayName _id ",
+			// 	},
+			// 	populate: {
+			// 		path: "likes",
+			// 		select: "username displayPic displayName _id",
+			// 	},
+			// 	populate: {
+			// 		path: "post",
+			// 		select: "_id",
+			// 	},
+			// })
 			.lean()
 			.exec();
 
@@ -156,6 +152,7 @@ async function getPost(req, res, next) {
 		//  * and does this post belong to me
 		post.isMine = req.user._id.toString() == post.author._id.toString();
 		// }
+		let comments = [];
 		for (let i = 0; i < post.comments.length; ++i) {
 			let comment = await Comment.findById(post.comments[i]._id)
 				.populate({
@@ -165,20 +162,23 @@ async function getPost(req, res, next) {
 				.populate({
 					path: "likes",
 					select: "displayName username displayPic _id",
-				});
-			// console.log(comment);
+				})
+				.lean()
+				.exec();
 
 			comment.isLiked = false;
 			comment.likes.forEach((like) => {
-				// console.log(like);
-				if (like._id.toString() == req.user._id.toString())
-					comment.isLiked = true;
+				comment.isLiked = like._id.toString() == req.user._id.toString();
 			});
-			// post.comments[i].author = author;
-			post.comments[i] = comment;
-			// console.log(comment);
+			comment.author.isFollowing = req.user.following.includes(
+				comment.author._id
+			);
+			console.log("is following author ", comment.author.isFollowing);
+			comments.push(comment);
 		}
-		console.log(post.comments[0].isLiked);
+		post.comments = comments;
+		// console.log(post.comments[0].isLiked);
+		// console.log(post.comments);
 		// post.comments = comments;
 		res.status(200).render("post", {
 			loggedInUser: req.user,

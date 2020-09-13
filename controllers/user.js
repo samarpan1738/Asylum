@@ -52,16 +52,24 @@ async function getUser(req, res, next) {
 		// * Check who all in the user's follower list is the current user following
 		user.followers.forEach((follower) => {
 			follower.isFollowing = false;
+			follower.isMe = false;
 			if (req.user.following.includes(follower._id.toString())) {
 				follower.isFollowing = true;
+			}
+			if (req.user._id.toString() === follower._id.toString()) {
+				follower.isMe = true;
 			}
 		});
 
 		// * Check who all in the user's following list is the current user following
 		user.following.forEach((user) => {
 			user.isFollowing = false;
+			user.isMe = false;
 			if (req.user.following.includes(user._id.toString())) {
 				user.isFollowing = true;
+			}
+			if (req.user._id.toString() === user._id.toString()) {
+				user.isMe = true;
 			}
 		});
 		// * Check is current user is following this user

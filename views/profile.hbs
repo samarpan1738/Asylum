@@ -9,12 +9,13 @@
     {{/each}}
     <link rel="stylesheet" href="/css/homepage.css">
     <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet" href="/css/stats-nav.css">
+
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    {{!-- <script src="/js/user.js" defer></script> --}}
     <script src="/js/posts.js" defer></script>
     <script src="/js/index.js" defer></script>
     <script src="/js/user.js" defer></script>
-    <script defer>
+    <script>
         const loggedInUser = {{{ convert loggedInUser }}}
         const users = {{{ convert users }}}
         const posts = {{{ convert posts }}}
@@ -22,49 +23,63 @@
 </head>
 
 <body>
+
+
     <div id="app">
         {{> sidebar}}
         <div class="hero-section">
 
             {{#each users as |user|}}
             <h3 class="heading">{{user.displayName}}</h3>
-            {{!-- <div class="profile">
-                <div class="profile-left">
-                    <img src="{{user.displayPic}}" alt="Display Pic">
-                </div>
-                <div class="profile-right">
-                    <div class="profile__heading">
-                        <h1>{{user.username}}</h1>
-                        <button class="follow-btn" class="not-following">Follow</button>
-                    </div>
-                    <div class="profile__stats">
-                        <div><span class="counter">{{user.postCount}} </span><span>posts</span></div>
-                        <div><span class="counter">{{user.followerCount}} </span><span>followers</span></div>
-                        <div><span class="counter">{{user.followingCount}} </span><span>following</span></div>
-                    </div>
-                    <h3 class="profile__name">{{user.displayName}}</h3>
-                </div>
-            </div> --}}
-            <div class="profile" id="{{user.username}}">
-                <div class="profile-left">
-                    <img src="{{user.displayPic}}" alt="Display Pic">
-                </div>
-                <div class="profile-right">
-                    <div class="profile__heading">
-                        <h1>{{user.username}}</h1>
-                        <button class="follow-btn" class="not-following">Follow</button>
-                    </div>
-                    <div class="profile__stats">
-                        <div><span>{{user.postCount}} </span><span>posts</span></div>
-                        <div><span>{{user.followerCount}} </span><span>followers</span></div>
-                        <div><span>{{user.followingCount}} </span><span>following</span></div>
-                    </div>
-                    <h3 class="profile__name">{{user.displayName}}</h3>
-                </div>
-            </div>
             {{/each}}
 
+            {{!-- PROFILE --}}
+
+            {{> profilesContainer}}
+
+            <div class="stats-nav">
+                <div class="nav-item nav-active nav-item-posts">Posts</div>
+                <div class="nav-item nav-item-followers">Followers</div>
+                <div class="nav-item nav-item-following">Following</div>
+            </div>
             {{> postsContainer}}
+            {{!-- Followers --}}
+            <div class="followers-tab">
+                {{#each users as |user|}}
+                {{#each user.followers as |follower|}}
+                <div class="follower" class="f_{{follower._id}}">
+                    <div>
+                        <img class="follower__displayPic" src="{{follower.displayPic}}" alt="" width="24" height="24">
+                    </div>
+                    <div class="follower__displayName">{{follower.displayName}}</div>
+                    <div class="follower__username">{{follower.username}}</div>
+                    <div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                </div>
+                {{/each}}
+                {{/each}}
+
+
+            </div>
+
+            {{!-- Following --}}
+            <div class="following-tab" class="f_{{follower._id}}">
+                {{#each users as |user|}}
+                {{#each user.following as |follower|}}
+                <div class="following">
+                    <div>
+                        <img class="following__displayPic" src="{{follower.displayPic}}" alt="" width="24" height="24">
+                    </div>
+                    <div class="following__displayName">{{follower.displayName}}</div>
+                    <div class="following__username">{{follower.username}}</div>
+                    <div>
+                        <button class="follow-btn ">Follow</button>
+                    </div>
+                </div>
+                {{/each}}
+                {{/each}}
+            </div>
         </div>
 </body>
 

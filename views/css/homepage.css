@@ -16,6 +16,7 @@ body {
 	justify-content: center;
 }
 #app {
+	/* opacity: 0.3; */
 	display: flex;
 	width: 70%;
 	height: 100%;
@@ -44,6 +45,7 @@ body {
 }
 .liked {
 	fill: rgb(202, 32, 85);
+	stroke: rgb(202, 32, 85);
 }
 .hero-section {
 	/* margin-left: 10%; */
@@ -59,15 +61,28 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	width: 90%;
 }
 .nav-option {
 	display: flex;
-	justify-content: center;
+	/* justify-content: space-between; */
 	align-items: center;
 	margin-bottom: 1em;
 	padding: 0.5em 0.75em;
+	padding-left: 1em;
 	border-radius: 2em;
+	width: 100%;
 }
+.nav-option a:first-child {
+	padding: 0;
+	margin: 0;
+}
+.nav-option a:last-child {
+	/* padding: 0; */
+	padding-left: 15px;
+	padding-right: 20px;
+}
+
 .active {
 	background-color: #e8f5fe;
 }

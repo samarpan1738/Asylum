@@ -4,12 +4,19 @@ posts.forEach((post) => {
 	if (post.isLiked) svg.classList.toggle("liked");
 });
 
+const comments = posts[0].comments;
+comments.forEach((comment) => {
+	let svg = document.querySelector(`#c_${comment._id} .likeBtn`);
+	if (comment.isLiked) svg.classList.toggle("liked");
+});
+
 let postsElements = Array.from(document.querySelectorAll(".posts .post"));
 postsElements.forEach((postElement) => {
 	postElement.onclick = (e) => {
-		// console.log(e.target);
+		console.log(e.target);
 		let post_id = postElement.id.split("_")[1];
 		if (e.target.classList[0] == "likeBtn") {
+			// console.log("Like btn clicked");
 			// * Change likBtn style
 			document
 				.querySelector(`#p_${post_id} .likeBtn`)

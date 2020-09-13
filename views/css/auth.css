@@ -37,8 +37,13 @@ input {
 	width: 450px;
 }
 .field-container {
-	border-bottom: 2px solid darkslategray;
 	background-color: rgb(245, 248, 250);
+}
+.field-container input {
+	border-bottom: 2px solid darkslategray;
+}
+.field-container input:focus {
+	border-bottom-color: #1da1f2;
 }
 .label {
 	padding: 5px 10px 0 10px;

@@ -21,7 +21,7 @@
         {{> sidebar}}
         <div class="hero-section">
             <h3 class="heading">Search</h3>
-            {{#each users as |user|}}
+            {{!-- {{#each users as |user|}}
             <div class="profile" id="{{user.username}}">
                 <div class="profile-left">
                     <img src="{{user.displayPic}}" alt="Display Pic">
@@ -39,7 +39,8 @@
                     <h3 class="profile__name">{{user.displayName}}</h3>
                 </div>
             </div>
-            {{/each}}
+            {{/each}} --}}
+            {{> profilesContainer}}
         </div>
 </body>
 

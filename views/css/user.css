@@ -15,13 +15,22 @@
 .not-following:hover {
 	background-color: #e8f5fe;
 }
-.following {
+.is-following {
 	background-color: #1da1f2;
 	border-color: #1da1f2;
 	color: white;
 }
-.following:hover {
+.is-following:hover {
 	background-color: rgb(202, 32, 85);
 	border-color: rgb(202, 32, 85);
 	color: white;
+}
+
+.profile__stats > * {
+	padding: 0.25em 0.75em;
+	transition: all 200ms ease-in-out;
+	border-radius: 10px;
+}
+.profile__stats > *:hover {
+	background-color: lightblue;
 }

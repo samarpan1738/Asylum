@@ -1,0 +1,19 @@
+{{#each users as |user|}}
+<div class="profile" id="{{user.username}}">
+    <div class="profile-left">
+        <img src="{{user.displayPic}}" alt="Display Pic">
+    </div>
+    <div class="profile-right">
+        <div class="profile__heading">
+            <h1>@{{user.username}}</h1>
+            <button class="follow-btn" class="not-following">Follow</button>
+        </div>
+        <div class="profile__stats">
+            <div><span>{{user.followerCount}} </span><span class="profile__stats__followers">followers</span></div>
+            <div><span>{{user.postCount}} </span><span class="profile__stats__posts">posts</span></div>
+            <div><span>{{user.followingCount}} </span><span class="profile__stats__following">following</span></div>
+        </div>
+        <h3 class="profile__name">{{user.displayName}}</h3>
+    </div>
+</div>
+{{/each}}
