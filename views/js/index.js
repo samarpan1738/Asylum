@@ -14,5 +14,7 @@ if (pathArr.length === 3) {
 		document.getElementById("nav__explore").classList.toggle("active");
 	else if (pathArr[1] == "user")
 		document.getElementById("nav__search").classList.toggle("active");
+	else if (pathArr[1] == "messages")
+		document.getElementById("nav__message").classList.toggle("active");
 	else document.getElementById("nav__" + pathArr[1]).classList.toggle("active");
 }

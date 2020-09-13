@@ -9,6 +9,7 @@ const { connect } = require("./helpers/db");
 const auth = require("./routes/auth");
 const user = require("./routes/user");
 const post = require("./routes/post");
+const messages = require("./routes/messages");
 const { errorHandler } = require("./helpers/error-handler");
 const { watchman } = require("./helpers/watchman");
 const { getPostsOfFollowing } = require("./controllers/post");
@@ -49,6 +50,7 @@ app.get("/home", watchman, getPostsOfFollowing);
 app.use("/auth", auth);
 app.use("/user", user);
 app.use("/post", post);
+app.use("/messages", messages);
 app.get("/logout", (req, res, next) => {
 	try {
 		req.logout();
