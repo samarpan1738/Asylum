@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 	if (req.user) res.redirect("/home");
 	else res.render("auth");
 });
-
+// test
 app.get("/home", watchman, getPostsOfFollowing);
 
 app.use("/auth", auth);
